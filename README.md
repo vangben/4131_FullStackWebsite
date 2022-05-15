@@ -1,5 +1,3 @@
-Benjamin Vang - vang2756 Homework 7 Submission
-
 ## Getting Started:
 1. after git cloning this repo, run "npm install" in your terminal
 2. then run the program with "node index.js"
