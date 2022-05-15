@@ -1,3 +1,7 @@
+## Prerequisites
+
+To work with this code, you will first need to install [Node.js](https://nodejs.org/en/).
+
 ## Getting Started:
 1. after git cloning this repo, run "npm install" in your terminal
 2. then run the program with "node index.js"
