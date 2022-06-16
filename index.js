@@ -31,22 +31,22 @@ fs.readFile(__dirname + '/dbconfig.xml', function(err, data){
     XMLConnect(); //asynchro call to access "info"
   });
 });
-// establish connection to database
-function XMLConnect(){
-  connection = mysql.createConnection({
-    host: info.dbconfig.host[0],//"localhost", final project update
-    user: info.dbconfig.user[0],//"root",               
-    password: info.dbconfig.password[0],//"Uywreazz1!",           
-    database: info.dbconfig.database[0],//"project",          
-    port: info.dbconfig.port[0],//3306
-  });
-  connection.connect(function(err){
-    if(err){
-      throw err;
-    };
-    console.log("Server connected to MYSQL database!");
-  });
-}
+// establish connection to database (no longer working due to course ending in May 2022)
+// function XMLConnect(){
+//   connection = mysql.createConnection({
+//     host: info.dbconfig.host[0],//"localhost", final project update
+//     user: info.dbconfig.user[0],//"root",               
+//     password: info.dbconfig.password[0],//"Uywreazz1!",           
+//     database: info.dbconfig.database[0],//"project",          
+//     port: info.dbconfig.port[0],//3306
+//   });
+//   connection.connect(function(err){
+//     if(err){
+//       throw err;
+//     };
+//     console.log("Server connected to MYSQL database!");
+//   });
+// }
 
 // Bcrypt library for comparing password hashes
 const bcrypt = require('bcrypt');
@@ -82,9 +82,14 @@ app.listen(port, () => console.log('Listening on port', port));
 app.get('/',function(req, res) {  // first page user sees
   if(!req.session.user){ //user is not logged in, redirect to login page
     //res.send('Session Not Started');
-    res.sendFile(__dirname + '/client/login.html');
+    // res.sendFile(__dirname + '/client/login.html');
+    res.sendFile(__dirname + '/client/welcome.html');
+
+    // console.log("landing page");
   } else {
     res.sendFile(__dirname + '/client/welcome.html');
+    // console.log("landing page1");
+
     //returns list of contacts from querying the contact_table
   }
   // res.sendFile(__dirname + '/client/welcome.html');
@@ -96,7 +101,9 @@ app.get('/',function(req, res) {  // first page user sees
 app.get('/MyContacts', function(req, res) {
     if(!req.session.user){ //user is not logged in, redirect to login page
       //res.send('Session Not Started');
-      res.sendFile(__dirname + '/client/login.html');
+      // res.sendFile(__dirname + '/client/login.html');
+      res.sendFile(__dirname + '/client/MyContacts.html');
+
     } else{
       res.sendFile(__dirname + '/client/MyContacts.html');
     }
@@ -121,7 +128,9 @@ app.get('/getContacts', function(req, res) {
 app.get('/AddContact', function(req,res) {
   if(!req.session.user){
       //res.send('Session Not Started');
-    res.sendFile(__dirname + '/client/login.html');
+    // res.sendFile(__dirname + '/client/login.html');
+    res.sendFile(__dirname + '/client/AddContact.html');
+
   } else{
     res.sendFile(__dirname + '/client/AddContact.html');
   }
@@ -130,7 +139,9 @@ app.get('/AddContact', function(req,res) {
 app.get('/AllContacts', function(req,res) {
   if(!req.session.user){ //user is not logged in, redirect to login page
     //res.send('Session Not Started');
-    res.sendFile(__dirname + '/client/login.html');
+    // res.sendFile(__dirname + '/client/login.html');
+    res.sendFile(__dirname + '/client/AllContacts.html');
+
   } else {
     res.sendFile(__dirname + '/client/AllContacts.html');
     //returns list of contacts from querying the contact_table
@@ -149,7 +160,9 @@ app.get('/getAllContacts', function(req, res) {
 });
 app.get('/Stocks', function(req,res) {
   if(!req.session.user){ //user is not logged in, redirect to login page
-    res.sendFile(__dirname + '/client/login.html');
+    // res.sendFile(__dirname + '/client/login.html');
+    res.sendFile(__dirname + '/client/Stocks.html');
+
   } else {
     res.sendFile(__dirname + '/client/Stocks.html');
 
@@ -158,7 +171,9 @@ app.get('/Stocks', function(req,res) {
 //called when welcome page's button is clicked
 app.get('/login', function(req,res) {
   if(!req.session.user){ //user is not logged in, redirect to login page
-    res.sendFile(__dirname + '/client/login.html');
+    // res.sendFile(__dirname + '/client/login.html');
+    res.sendFile(__dirname + '/client/AllContacts.html'); //user is already logged in, redirect to AllContacts
+
   } else {
     res.sendFile(__dirname + '/client/AllContacts.html'); //user is already logged in, redirect to AllContacts
 
@@ -221,7 +236,9 @@ app.post('/login', function(req, res) {
 app.get('/admin', function(req,res) {
   //res.sendFile(__dirname + '/client/Admin.html');
   if(!req.session.user){ //user is not logged in, redirect to login page
-    res.sendFile(__dirname + '/client/login.html');
+    // res.sendFile(__dirname + '/client/login.html');
+    res.sendFile(__dirname + '/client/Admin.html'); //user is already logged in, redirect to AllContacts
+
   } else {
     res.sendFile(__dirname + '/client/Admin.html'); //user is already logged in, redirect to AllContacts
   }
@@ -232,9 +249,9 @@ app.get('/admin', function(req,res) {
 //server retrieves userdata from database, sends to admin page client
 app.get('/userlist', function(req,res) {
   //res.sendFile(__dirname + '/client/Admin.html');
-  if(!req.session.user){ //user is not logged in, redirect to login page
-    res.sendFile(__dirname + '/client/login.html');
-  } else {
+  // if(!req.session.user){ //user is not logged in, redirect to login page
+  //   // res.sendFile(__dirname + '/client/login.html');
+  // } else {
     connection.query('SELECT * FROM tbl_accounts', function(err,rows,fields){
       if(err) throw err;
       var objArray = [];
@@ -249,16 +266,16 @@ app.get('/userlist', function(req,res) {
       }
       res.json(objArray);
     }); 
-  }
+  // }
 });//end of /userlist
 
 //add a user to tbl_accounts table in DB
 app.post('/addUser', function(req,res){ 
   let login2 = req.body.login;
 
-  if(!req.session.user){ //user is not logged in, redirect to login page
-    res.sendFile(__dirname + '/client/login.html');
-  } else {
+  // if(!req.session.user){ //user is not logged in, redirect to login page
+  //   // res.sendFile(__dirname + '/client/login.html');
+  // } else {
     //add given user into DB
     connection.query('SELECT * FROM tbl_accounts WHERE acc_login =?',[login2], function(err,rows,fields){
       if(err) throw err;
@@ -284,14 +301,14 @@ app.post('/addUser', function(req,res){
         res.send({flag:false});
       }
     });
-  }
+  // }
 });
 
 //allows changes to an existing user in the DB
 app.post('/updateUser', function(req,res){
-  if(!req.session.user){ //user is not logged in, redirect to login page
-    res.sendFile(__dirname + '/client/login.html');
-  } else {
+  // if(!req.session.user){ //user is not logged in, redirect to login page
+  //    res.sendFile(__dirname + '/client/login.html');
+  // } else {
     connection.query('SELECT * FROM tbl_accounts WHERE acc_login=? and acc_id != ?', 
     [req.body.login,req.body.id], function(err,result,fields){
       if(err) throw err;
@@ -320,7 +337,7 @@ app.post('/updateUser', function(req,res){
         res.send({flag:false});
       }
     }); //end of SELECT statement
-  }
+  // }
 }); //end of post updateUser
 
 //bonus feature, welcome message for current user
@@ -332,9 +349,9 @@ app.get('/loginWelcome', function(req,res) {
 });
 
 app.post('/deleteUser', function(req,res) {
-  if(!req.session.user){ //user is not logged in, redirect to login page
-    res.sendFile(__dirname + '/client/login.html');
-  } else {
+  // if(!req.session.user){ //user is not logged in, redirect to login page
+  //   res.sendFile(__dirname + '/client/login.html');
+  // } else {
     console.log("current user: "+req.session.user +'\n'+"trying to delete user:" + req.body.login);
     if(req.session.user != req.body.login){
       //console.log("cannot delete currently logged-in user");
@@ -347,14 +364,14 @@ app.post('/deleteUser', function(req,res) {
     } else {
       res.send({flag:false});
     }
-  }
+  // }
 });
 
 
 app.post('/switch', function(req,res){
-  if(!req.session.user){ //user is not logged in, redirect to login page
-    res.sendFile(__dirname + '/client/login.html');
-  } else {
+  // if(!req.session.user){ //user is not logged in, redirect to login page
+  //   res.sendFile(__dirname + '/client/login.html');
+  // } else {
     req.session.reload(function(err){ //here?
       if(err) throw err;
       req.session.user = req.body.login;
@@ -363,7 +380,7 @@ app.post('/switch', function(req,res){
       res.statusCode = 200;
       res.end();
     });
-  }
+  // }
 });
 
 
