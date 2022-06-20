@@ -1,8 +1,10 @@
+## NOTE: below steps to run the program do not currently work as the database for the course has ended as of May 2022, thus logging in doesn't work
+However, html files can still be opened and viewed
+
+
 ## Prerequisites
 
 To work with this code, you will first need to install [Node.js](https://nodejs.org/en/).
-
-## NOTE: below steps do not currently work as the database for the course has ended as of May 2022
 
 ## Getting Started:
 1. after git cloning this repo, run "npm install" in your terminal
